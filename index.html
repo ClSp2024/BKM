@@ -36,11 +36,12 @@
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
         <script src="data/Natura2000_1.js"></script>
-        <script src="data/Locaties_Meldingen_2.js"></script>
+        <script src="data/gemeentegrenzen_smpl_2.js"></script>
+        <script src="data/Locaties_Meldingen_3.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[50.67922640261563,2.137037609818259],[53.52584625385312,9.470638575648753]]);
+        }).fitBounds([[50.696042977927775,2.5067287521007264],[53.554852357891825,9.844559634415463]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -175,7 +176,54 @@
         });
         bounds_group.addLayer(layer_Natura2000_1);
         map.addLayer(layer_Natura2000_1);
-        function pop_Locaties_Meldingen_2(feature, layer) {
+        function pop_gemeentegrenzen_smpl_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">code</th>\
+                        <td>' + (feature.properties['code'] !== null ? autolinker.link(feature.properties['code'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">gemeentena</th>\
+                        <td>' + (feature.properties['gemeentena'] !== null ? autolinker.link(feature.properties['gemeentena'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_gemeentegrenzen_smpl_2_0() {
+            return {
+                pane: 'pane_gemeentegrenzen_smpl_2',
+                opacity: 1,
+                color: 'rgba(66,74,79,0.4196078431372549)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,207,80,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_gemeentegrenzen_smpl_2');
+        map.getPane('pane_gemeentegrenzen_smpl_2').style.zIndex = 402;
+        map.getPane('pane_gemeentegrenzen_smpl_2').style['mix-blend-mode'] = 'normal';
+        var layer_gemeentegrenzen_smpl_2 = new L.geoJson(json_gemeentegrenzen_smpl_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_gemeentegrenzen_smpl_2',
+            layerName: 'layer_gemeentegrenzen_smpl_2',
+            pane: 'pane_gemeentegrenzen_smpl_2',
+            onEachFeature: pop_gemeentegrenzen_smpl_2,
+            style: style_gemeentegrenzen_smpl_2_0,
+        });
+        bounds_group.addLayer(layer_gemeentegrenzen_smpl_2);
+        map.addLayer(layer_gemeentegrenzen_smpl_2);
+        function pop_Locaties_Meldingen_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">tekst</th>\
@@ -217,11 +265,11 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_Locaties_Meldingen_2_0(feature) {
+        function style_Locaties_Meldingen_3_0(feature) {
             switch(String(feature.properties['grootte'])) {
                 case 'Diverse bomen':
                     return {
-                pane: 'pane_Locaties_Meldingen_2',
+                pane: 'pane_Locaties_Meldingen_3',
                 radius: 8.0,
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
@@ -237,7 +285,7 @@
                     break;
                 case 'Een boom':
                     return {
-                pane: 'pane_Locaties_Meldingen_2',
+                pane: 'pane_Locaties_Meldingen_3',
                 radius: 5.0,
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
@@ -253,7 +301,7 @@
                     break;
                 case 'Grootschalig':
                     return {
-                pane: 'pane_Locaties_Meldingen_2',
+                pane: 'pane_Locaties_Meldingen_3',
                 radius: 8.0,
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
@@ -269,7 +317,7 @@
                     break;
                 case 'Zeer Grootschalig':
                     return {
-                pane: 'pane_Locaties_Meldingen_2',
+                pane: 'pane_Locaties_Meldingen_3',
                 radius: 10.0,
                 opacity: 1,
                 color: 'rgba(255,255,255,1.0)',
@@ -285,26 +333,26 @@
                     break;
             }
         }
-        map.createPane('pane_Locaties_Meldingen_2');
-        map.getPane('pane_Locaties_Meldingen_2').style.zIndex = 402;
-        map.getPane('pane_Locaties_Meldingen_2').style['mix-blend-mode'] = 'normal';
-        var layer_Locaties_Meldingen_2 = new L.geoJson(json_Locaties_Meldingen_2, {
+        map.createPane('pane_Locaties_Meldingen_3');
+        map.getPane('pane_Locaties_Meldingen_3').style.zIndex = 403;
+        map.getPane('pane_Locaties_Meldingen_3').style['mix-blend-mode'] = 'normal';
+        var layer_Locaties_Meldingen_3 = new L.geoJson(json_Locaties_Meldingen_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Locaties_Meldingen_2',
-            layerName: 'layer_Locaties_Meldingen_2',
-            pane: 'pane_Locaties_Meldingen_2',
-            onEachFeature: pop_Locaties_Meldingen_2,
+            dataVar: 'json_Locaties_Meldingen_3',
+            layerName: 'layer_Locaties_Meldingen_3',
+            pane: 'pane_Locaties_Meldingen_3',
+            onEachFeature: pop_Locaties_Meldingen_3,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Locaties_Meldingen_2_0(feature));
+                return L.circleMarker(latlng, style_Locaties_Meldingen_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Locaties_Meldingen_2);
-        map.addLayer(layer_Locaties_Meldingen_2);
+        bounds_group.addLayer(layer_Locaties_Meldingen_3);
+        map.addLayer(layer_Locaties_Meldingen_3);
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
             position: 'topleft',
@@ -317,7 +365,8 @@
         .title += 'Search for a place';
         var baseMaps = {};
         var overlaysTree = [
-            {label: 'Locaties_Meldingen<br /><table><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_2_Diversebomen0.png" /></td><td>Diverse bomen</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_2_Eenboom1.png" /></td><td>Een boom</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_2_Grootschalig2.png" /></td><td>Grootschalig</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_2_ZeerGrootschalig3.png" /></td><td>Zeer Grootschalig</td></tr></table>', layer: layer_Locaties_Meldingen_2},
+            {label: 'Locaties_Meldingen<br /><table><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_3_Diversebomen0.png" /></td><td>Diverse bomen</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_3_Eenboom1.png" /></td><td>Een boom</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_3_Grootschalig2.png" /></td><td>Grootschalig</td></tr><tr><td style="text-align: center;"><img src="legend/Locaties_Meldingen_3_ZeerGrootschalig3.png" /></td><td>Zeer Grootschalig</td></tr></table>', layer: layer_Locaties_Meldingen_3},
+            {label: '<img src="legend/gemeentegrenzen_smpl_2.png" /> gemeentegrenzen_smpl', layer: layer_gemeentegrenzen_smpl_2},
             {label: '<img src="legend/Natura2000_1.png" /> Natura2000', layer: layer_Natura2000_1},
             {label: "OSM Standard", layer: layer_OSMStandard_0},]
         var lay = L.control.layers.tree(null, overlaysTree,{
@@ -332,13 +381,13 @@
         lay.addTo(map);
         map.on("zoomend", function(){
 
-                if (map.hasLayer(layer_Locaties_Meldingen_2)) {
+                if (map.hasLayer(layer_Locaties_Meldingen_3)) {
                     if (map.getZoom() <= 12 && map.getZoom() >= 19) {
-                        layer_Locaties_Meldingen_2.eachLayer(function (layer) {
+                        layer_Locaties_Meldingen_3.eachLayer(function (layer) {
                             layer.openTooltip();
                         });
                     } else {
-                        layer_Locaties_Meldingen_2.eachLayer(function (layer) {
+                        layer_Locaties_Meldingen_3.eachLayer(function (layer) {
                             layer.closeTooltip();
                         });
                     }
@@ -346,38 +395,38 @@
         });
         setBounds();
         var i = 0;
-        layer_Locaties_Meldingen_2.eachLayer(function(layer) {
+        layer_Locaties_Meldingen_3.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['datum'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['datum']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Locaties_Meldingen_2'});
+            layer.bindTooltip((layer.feature.properties['datum'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['datum']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Locaties_Meldingen_3'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
               addLabel(layer, i);
               i++;
         });
-                if (map.hasLayer(layer_Locaties_Meldingen_2)) {
+                if (map.hasLayer(layer_Locaties_Meldingen_3)) {
                     if (map.getZoom() <= 12 && map.getZoom() >= 19) {
-                        layer_Locaties_Meldingen_2.eachLayer(function (layer) {
+                        layer_Locaties_Meldingen_3.eachLayer(function (layer) {
                             layer.openTooltip();
                         });
                     } else {
-                        layer_Locaties_Meldingen_2.eachLayer(function (layer) {
+                        layer_Locaties_Meldingen_3.eachLayer(function (layer) {
                             layer.closeTooltip();
                         });
                     }
                 }
-        resetLabels([layer_Locaties_Meldingen_2]);
+        resetLabels([layer_Locaties_Meldingen_3]);
         map.on("zoomend", function(){
-            resetLabels([layer_Locaties_Meldingen_2]);
+            resetLabels([layer_Locaties_Meldingen_3]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_Locaties_Meldingen_2]);
+            resetLabels([layer_Locaties_Meldingen_3]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_Locaties_Meldingen_2]);
+            resetLabels([layer_Locaties_Meldingen_3]);
         });
         </script>
     </body>
