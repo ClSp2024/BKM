@@ -38,14 +38,9 @@
         <script src="data/Natura2000_1.js"></script>
         <script src="data/Locaties_Meldingen_2.js"></script>
         <script>
-        var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
-            highlightLayer.openPopup();
-        }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[51.70409257311673,4.457798819940208],[52.40340424418207,6.246302583754212]]);
+        }).fitBounds([[51.676824303219846,4.450073051376166],[52.37619901647477,6.237479251498231]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -92,14 +87,20 @@
             this._div = L.DomUtil.create('div',
             'leaflet-control abstract');
             this._div.id = 'abstract'
-
-                abstract.show();
+                this._div.setAttribute("onmouseenter", "abstract.show()");
+                this._div.setAttribute("onmouseleave", "abstract.hide()");
+                this.hide();
                 return this._div;
             };
+            abstract.hide = function () {
+                this._div.classList.remove("abstractUncollapsed");
+                this._div.classList.add("abstract");
+                this._div.innerHTML = 'i'
+            }
             abstract.show = function () {
                 this._div.classList.remove("abstract");
                 this._div.classList.add("abstractUncollapsed");
-                this._div.innerHTML = 'Deze kaart bevat alle meldingen tot en met mei 2024. Diverse bomen = meer dan 10,Grootschalig = meer dan 100 en Zeer Grootschalig = meer dan 500';
+                this._div.innerHTML = 'Deze kaart bevat alle meldingen tot en met mei 2024 van de website https://www.bomenkapmeldpunt.nl/.<br />De kaart wordt ongeveer 5x per jaar geactualiseerd.<br />Diverse bomen = meer dan 10,Grootschalig = meer dan 100 en Zeer Grootschalig = meer dan 500';
         };
         abstract.addTo(map);
         var zoomControl = L.control.zoom({
@@ -132,18 +133,6 @@
         layer_OSMStandard_0;
         map.addLayer(layer_OSMStandard_0);
         function pop_Natura2000_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">naam_n2k</th>\
@@ -187,18 +176,6 @@
         bounds_group.addLayer(layer_Natura2000_1);
         map.addLayer(layer_Natura2000_1);
         function pop_Locaties_Meldingen_2(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">tekst</th>\
